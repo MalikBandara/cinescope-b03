@@ -1,10 +1,9 @@
 // SSR - Server Side Rendered - Server Component
+import HeaderNav from '@/components/header-nav';
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="flex-1 bg-gray-400">
-        Header Section
-      </header>
+      <HeaderNav />
       <main className="flex-1 bg-primary">
         Main Section
       </main>
