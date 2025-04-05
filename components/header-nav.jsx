@@ -1,7 +1,7 @@
 
 export default function HeaderNav() {
   return (
-    <header className="flex-1 bg-gray-400">
+    <header className="bg-gray-400 h-16">
         Header Section
       </header>
   )
