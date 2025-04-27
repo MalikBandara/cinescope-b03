@@ -15,8 +15,8 @@ export default async function MoviesList() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {/*movies loop*/}
-      {Movies.map((movie) => (
-        <div key={movie.id} className="">
+      {movies.map((movie , index  ) => (
+        <div key={`${movie.id}-${index}`} className="">
           <Link href={`/movies/${movie.id}`}>
             <Card className="border-primary/20 hover:border-primary/50 overflow-hidden py-0 transition-colors ">
               <div className="aspect-2/3  w-full overflow-hidden">
@@ -26,6 +26,7 @@ export default async function MoviesList() {
                   src={movie.poster || "./placeholder.svg"}
                   alt={movie.title}
                   className="h-full w-full object-cover transition-transform duration-200 ease-in-out hover:scale-105"
+                  priority={index < 3} // Load first 3 images with priority
                 />
               </div>
             </Card>
