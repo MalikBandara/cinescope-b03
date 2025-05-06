@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,9 +13,71 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { signIn } from "@/lib/auth-clinet";
+
+const DEFAULT_ERROR = {
+  error: false,
+  message: "",
+};
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression for email validation
 
 //Client component (CSR)
 export function LoginForm() {
+  const [error, setError] = useState(DEFAULT_ERROR);
+
+  const handelSubmitForm = async (event) => {
+    const validateForm = ({ email, password }) => {
+      if (email === "") {
+        setError({
+          error: true,
+          message: "Email is required",
+        });
+        return false; // Add your validation logic here
+      } else if (password === "") {
+        setError({
+          error: true,
+          message: "Password is required",
+        });
+        return false;
+      } else if (!EMAIL_REGEX.test(email)) {
+        setError({
+          error: true,
+          message: "Email is not valid",
+        });
+        return false; // Add your validation logic here
+      }
+
+      setError(DEFAULT_ERROR);
+
+      return true; // Add your validation logic here
+    };
+
+    event.preventDefault(); // prevent default form submission
+    const formData = new FormData(event.currentTarget); // get form data
+    const email = formData.get("email"); // get email from form data
+
+    const password = formData.get("password"); // get password from form data
+
+    if (validateForm({ email, password })) {
+      await signIn.email(
+        { email, password },
+        {
+          onSuccess: () => {
+            //redirect to dashboard 
+          },
+          onError: (ctx) => {
+            setError({
+              error: true,
+              message: ctx.error.message,
+            });
+            //loading(false);
+          },
+        }
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -25,15 +88,16 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handelSubmitForm}>
             <div className="flex flex-col gap-6">
               <div className=" grid gap-3 ">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   name="email"
-                  type="email"
+                  type=""
                   placeholder="Enter your Email "
+                  autoComplete="email"
                 />
               </div>
               <div className=" grid gap-3 ">
@@ -51,9 +115,17 @@ export function LoginForm() {
                   name="password"
                   type="password"
                   placeholder="Enter your password "
+                  autoComplete="current-password"
                 />
               </div>
               {/* error message */}
+              <div className="flex justify-center">
+                {error.error && (
+                  <span className="text-red-600 text-xs text-center animate-pulse duration-700">
+                    {error.message}
+                  </span>
+                )}
+              </div>
               <div className="flex flex-col gap-3 ">
                 <Button type="submit" className="w-full">
                   Login
