@@ -1,4 +1,4 @@
-export default function DashboardPage() {
+export default function AdminDashboard() {
     return (
         <div>
         <h1>Dashboard</h1>

@@ -1,8 +1,8 @@
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import MoviesList from "./movies-list";
-import { Suspense } from "react";
+import { Search } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import MoviesList, { MovieListSkeleton } from './movies-list'
+import { Suspense } from 'react'
 
 export default function FeaturedMovies() {
   return (
@@ -10,7 +10,7 @@ export default function FeaturedMovies() {
       <div className="mb-8 flex items-center justify-between ">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">
-            Featured Movies{" "}
+            Featured Movies{' '}
           </h2>
           <p className="text-muted-foreground ">
             Explore the latest and greatest movies in that are making waves in
@@ -32,14 +32,10 @@ export default function FeaturedMovies() {
             </div>
           </div>
         </div>
-        <Suspense
-          fallback={
-            <div className="h-96 animate-pulse rounded-lg bg-muted"></div>
-          }
-        >
+        <Suspense fallback={<MovieListSkeleton />}>
           <MoviesList />
         </Suspense>
       </div>
     </section>
-  );
+  )
 }
