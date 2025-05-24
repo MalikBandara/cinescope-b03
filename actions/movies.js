@@ -1,3 +1,8 @@
+
+'use server'
+
+import {db} from "@/lib/db";
+
 //get all movies action 
 
 export const getMovies = async () => {
@@ -29,3 +34,27 @@ export const getMovies = async () => {
     return undefined;
   }
 };
+
+
+// create movie action
+
+export const createMovie = async (movie) =>{
+
+  try{
+    const result = await db.collection('movies_n').insertOne(movie);
+
+
+    if(result.acknowledged){
+      console.log(`movie created with id ${result.insertedId}`);
+      return {
+        success: true,
+        message: `movie created with id ${result.insertedId}`,
+      }
+    }else {
+      return undefined;
+    }
+  }catch{
+    console.log('mongo db insert  error');
+  }
+
+}

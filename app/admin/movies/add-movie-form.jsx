@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import {
   Select,
   SelectContent,
@@ -13,10 +15,65 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { createMovie } from '@/actions/movies'
 
 export function AddMovieForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const handelSubmit = async event => {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const title = formData.get('title')
+    const year = formData.get('year')
+    const director = formData.get('director')
+    const genre = formData.get('genre')
+    const rating = formData.get('rating')
+    const runtime = formData.get('runtime')
+    const overview = formData.get('overview')
+    const poster = formData.get('poster')
+    const backdrop = formData.get('backdrop')
+    const MovieStatus = formData.get('status')
+    // Here you can handle the form submission, e.g., send data to an API
+    console.log('Form data  :', {
+      title,
+      year,
+      director,
+      genre,
+      rating,
+      runtime,
+      overview,
+      poster,
+      backdrop,
+      MovieStatus,
+    })
+
+    setIsSubmitting(true)
+
+ const response =  await createMovie({
+      title,
+      year,
+      directors: [director],
+      genres: [genre],
+      imdb: { rating },
+      runtime,
+      plot: overview,
+      poster,
+      backdrop,
+      status: MovieStatus,
+      lastupdated: Date().toString  (),
+    });
+
+
+    setIsSubmitting(false);
+
+    if(response?.success){
+        console.log(response);
+    }
+
+    setTimeout(() => setIsSubmitting(false), 3000)
+  }
+
   return (
-    <form className="space-y-4">
+    <form onSubmit={handelSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2 ">
           <Label htmlFor="title">Title</Label>
@@ -84,6 +141,7 @@ export function AddMovieForm() {
         <Label htmlFor="overview">Overview</Label>
         <Textarea
           id="overview"
+          name="overview"
           placeholder="Movie description"
           className="max-h-[100px]"
         />
@@ -124,8 +182,12 @@ export function AddMovieForm() {
       </div>
 
       <DialogFooter>
-        <Button type='button' variant='outline'>Cancel</Button>
-        <Button type='submit'>Add Movie</Button>
+        <Button type="button" variant="outline" className="min-w-[102]">
+          Cancel
+        </Button>
+        <Button type="submit" className="min-w-[102]" disabled={isSubmitting}>
+          {isSubmitting ? 'Adding..' : 'Add movie'}
+        </Button>
       </DialogFooter>
     </form>
   )
