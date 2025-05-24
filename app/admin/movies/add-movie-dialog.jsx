@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
+import { AddMovieForm } from './add-movie-form'
 
 export default function AddMovieDialog() {
   const [showAddMovie, setShowAddMovie] = useState(false)
@@ -19,14 +20,15 @@ export default function AddMovieDialog() {
       <DialogTrigger asChild>
         <Button><Plus className='mr-2 h-4 w-4'/>Add Movie</Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+      <DialogContent className='sm:max-w-[600px] '>
+        <DialogHeader >
+          <DialogTitle>Add New Movie</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            Fill the form below to add a new movie to your catalog.
           </DialogDescription>
         </DialogHeader>
+        {/* Add movie form goes here... */}
+        <AddMovieForm/>
       </DialogContent>
     </Dialog>
   )
