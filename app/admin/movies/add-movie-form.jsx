@@ -48,25 +48,24 @@ export function AddMovieForm() {
 
     setIsSubmitting(true)
 
- const response =  await createMovie({
+    const response = await createMovie({
       title,
       year,
       directors: [director],
       genres: [genre],
-      imdb: { rating },
+      imdb: { rating :  Number(rating) },
       runtime,
       plot: overview,
       poster,
       backdrop,
       status: MovieStatus,
-      lastupdated: Date().toString  (),
-    });
+      lastupdated: Date().toString(),
+    })
 
+    setIsSubmitting(false)
 
-    setIsSubmitting(false);
-
-    if(response?.success){
-        console.log(response);
+    if (response?.success) {
+      console.log(response)
     }
 
     setTimeout(() => setIsSubmitting(false), 3000)

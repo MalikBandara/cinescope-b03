@@ -1,4 +1,5 @@
 import AddMovieDialog from './add-movie-dialog'
+import MovieTable from './movie-table'
 
 export default function MoviePage() {
   return (
@@ -14,9 +15,8 @@ export default function MoviePage() {
         </div>
 
         <AddMovieDialog />
-
-        
       </div>
+      <MovieTable />
     </div>
   )
 }
