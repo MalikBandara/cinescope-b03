@@ -16,8 +16,22 @@ import { Textarea } from '@/components/ui/textarea'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { createMovie } from '@/actions/movies'
+import { Hand } from 'lucide-react'
 
-export function AddMovieForm() {
+//destructure the AddMovieForm component prop
+export function AddMovieForm({ onClose }) {
+  const [selectedYear, setSelectedYear] = useState('')
+  const [selectedGenre, setSelectedGenre] = useState('')
+  const [selectedStatus, setSelectedStatus] = useState('')
+
+  const HandelClose = () => {
+    setSelectedYear(null)
+    setSelectedGenre(null)
+    setSelectedStatus(null)
+    // close the dialog
+    onClose(false)
+  }
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const handelSubmit = async event => {
     event.preventDefault()
@@ -53,7 +67,7 @@ export function AddMovieForm() {
       year,
       directors: [director],
       genres: [genre],
-      imdb: { rating :  Number(rating) },
+      imdb: { rating: Number(rating) },
       runtime,
       plot: overview,
       poster,
@@ -66,6 +80,7 @@ export function AddMovieForm() {
 
     if (response?.success) {
       console.log(response)
+      HandelClose()
     }
 
     setTimeout(() => setIsSubmitting(false), 3000)
@@ -80,7 +95,13 @@ export function AddMovieForm() {
         </div>
         <div className="space-y-2 ">
           <Label htmlFor="year">Year</Label>
-          <Select id="year" name="year" required>
+          <Select
+            id="year"
+            name="year"
+            onValueChange={setSelectedYear}
+            value={selectedYear}
+            required
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
@@ -98,14 +119,20 @@ export function AddMovieForm() {
         </div>
         <div className="space-y-2 ">
           <Label htmlFor="genre">Genre</Label>
-          <Select id="genre" name="genre" required>
+          <Select
+            id="genre"
+            name="genre"
+            required
+            value={selectedGenre}
+            onValueChange={setSelectedGenre}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select genre" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="2025">Action</SelectItem>
-              <SelectItem value="2024">Adventure</SelectItem>
-              <SelectItem value="2023">Sci-fi</SelectItem>
+              <SelectItem value="Action">Action</SelectItem>
+              <SelectItem value="Adventure">Adventure</SelectItem>
+              <SelectItem value="Sci-fi">Sci-fi</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -167,7 +194,13 @@ export function AddMovieForm() {
 
         <div className="space-y-2 ">
           <Label htmlFor="status">Status</Label>
-          <Select id="status" name="status" required>
+          <Select
+            value={selectedStatus}
+            onValueChange={setSelectedStatus}
+            id="status"
+            name="status"
+            required
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
@@ -181,7 +214,13 @@ export function AddMovieForm() {
       </div>
 
       <DialogFooter>
-        <Button type="button" variant="outline" className="min-w-[102]">
+        <Button
+          type="reset"
+          variant="outline"
+          className="min-w-[102]"
+          disabled={isSubmitting}
+          onClick={HandelClose}
+        >
           Cancel
         </Button>
         <Button type="submit" className="min-w-[102]" disabled={isSubmitting}>

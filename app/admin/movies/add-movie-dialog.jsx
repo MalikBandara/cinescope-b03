@@ -28,7 +28,7 @@ export default function AddMovieDialog() {
           </DialogDescription>
         </DialogHeader>
         {/* Add movie form goes here... */}
-        <AddMovieForm/>
+        <AddMovieForm onClose= {setShowAddMovie}/>
       </DialogContent>
     </Dialog>
   )
