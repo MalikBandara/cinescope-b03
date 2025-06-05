@@ -54,6 +54,8 @@ export const createMovie = async movie => {
   }
 }
 
+
+//update movie action
 export const UpdateMovie = async (movieId, movieDoc) => {
   try {
     const result = await db
@@ -75,5 +77,29 @@ export const UpdateMovie = async (movieId, movieDoc) => {
     }
   } catch {
     console.log('mongo db Update  error')
+  }
+}
+
+
+// delete movie action
+export const DeleteMovie = async (movieId) => {
+  try {
+    const result = await db
+      .collection('movies_n')
+      .deleteOne(
+        { _id: ObjectId.createFromHexString(movieId) },
+      )
+
+    if (result.acknowledged) {
+      console.log(`movie Delete Successfully}`)
+      return {
+        success: true,
+        message: `movie Delete Successfully`,
+      }
+    } else {
+      return undefined
+    }
+  } catch {
+    console.log('mongo db Delete  error')
   }
 }

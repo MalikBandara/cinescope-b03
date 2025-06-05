@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { MoreHorizontal } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,13 +24,32 @@ import {
 // import { Movies } from '@/lib/data'
 import Image from 'next/image'
 import UpdateMovieDialog from './update-movie-dialog'
+import DeleteMovieDialog from './delete-movie-dialog'
+import { DeleteMovie } from '@/actions/movies'
 export default function MovieTable({ movies }) {
+  const router = useRouter()
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [showUpdateDialog, setShowUpdateDialog] = useState(false)
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const toggleUpdateDialog = open => {
     //Using requestAnimationFrame to ensure the dialog opens smoothly
     requestAnimationFrame(() => setShowUpdateDialog(open || !showUpdateDialog))
+  }
+
+  const toggleDeleteDialog = open => {
+    requestAnimationFrame(() => setShowDeleteDialog(open || !showDeleteDialog))
+  }
+
+  
+
+  const handelMovieDelete = async movieId => {
+    const resp = await DeleteMovie(movieId)
+    if (resp?.success) {
+      setSelectedMovie(null)
+      router.refresh()
+    }
   }
 
   const getMovieStatusClass = status => {
@@ -114,7 +134,13 @@ export default function MovieTable({ movies }) {
                     >
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive">
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => {
+                        setSelectedMovie(movies)
+                        toggleDeleteDialog(true)
+                      }}
+                    >
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -127,8 +153,16 @@ export default function MovieTable({ movies }) {
 
       <UpdateMovieDialog
         open={showUpdateDialog}
-        onOpenChange={setShowUpdateDialog}
+        onOpenChange={toggleUpdateDialog}
         movies={selectedMovie}
+      />
+
+      <DeleteMovieDialog
+        open={showDeleteDialog}
+        onOpenChange={toggleDeleteDialog}
+        movies={selectedMovie}
+        onConfirm={id => handelMovieDelete(id)}
+        isLoading={false}
       />
     </div>
   )

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import {
   Select,
@@ -21,6 +22,7 @@ import { getAllGenres, getAllYears } from '@/lib/utils'
 
 //destructure the AddMovieForm component prop
 export function AddMovieForm({ onClose }) {
+  const router = useRouter()
   const [selectedYear, setSelectedYear] = useState('')
   const [selectedGenre, setSelectedGenre] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
@@ -89,6 +91,7 @@ export function AddMovieForm({ onClose }) {
     if (response?.success) {
       console.log(response)
       HandelClose()
+      router.refresh()
     }
 
     setTimeout(() => setIsSubmitting(false), 3000)
