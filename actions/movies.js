@@ -1,60 +1,79 @@
-
 'use server'
 
-import {db} from "@/lib/db";
+import { db } from '@/lib/db'
+import { ObjectId } from 'mongodb'
 
-//get all movies action 
+//get all movies action
 
 export const getMovies = async () => {
   try {
-
     //using fetch to get movies from the server
 
-    const response = await fetch("http://localhost:3000/api/v1/movies", {
-      method: "GET",
+    const response = await fetch('http://localhost:3000/api/v1/movies', {
+      method: 'GET',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
       },
-      cache: "no-store",
-    });
+      cache: 'no-store',
+    })
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error('Network response was not ok')
     }
 
     if (response.status === 200) {
-      return await response.json();
+      return await response.json()
     } else {
-      console.log("No movies found");
-      return undefined;
+      console.log('No movies found')
+      return undefined
     }
   } catch (error) {
-    console.log("Error fetching movies", error);
-    return undefined;
+    console.log('Error fetching movies', error)
+    return undefined
   }
-};
-
+}
 
 // create movie action
 
-export const createMovie = async (movie) =>{
+export const createMovie = async movie => {
+  try {
+    const result = await db.collection('movies_n').insertOne(movie)
 
-  try{
-    const result = await db.collection('movies_n').insertOne(movie);
-
-
-    if(result.acknowledged){
-      console.log(`movie created with id ${result.insertedId}`);
+    if (result.acknowledged) {
+      console.log(`movie created with id ${result.insertedId}`)
       return {
         success: true,
         message: `movie created with id ${result.insertedId}`,
       }
-    }else {
-      return undefined;
+    } else {
+      return undefined
     }
-  }catch{
-    console.log('mongo db insert  error');
+  } catch {
+    console.log('mongo db insert  error')
   }
+}
 
+export const UpdateMovie = async (movieId, movieDoc) => {
+  try {
+    const result = await db
+      .collection('movies_n')
+      .updateOne(
+        { _id: ObjectId.createFromHexString(movieId) },
+        { $set: movieDoc },
+        { upsert: true },
+      )
+
+    if (result.acknowledged) {
+      console.log(`movie update Successfully}`)
+      return {
+        success: true,
+        message: `movie update Successfully`,
+      }
+    } else {
+      return undefined
+    }
+  } catch {
+    console.log('mongo db Update  error')
+  }
 }

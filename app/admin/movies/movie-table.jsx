@@ -1,3 +1,5 @@
+'use client'
+import { useState } from 'react'
 import { MoreHorizontal } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -20,7 +22,29 @@ import {
 } from '@/components/ui/table'
 // import { Movies } from '@/lib/data'
 import Image from 'next/image'
-export default function MovieTable({movies}) {
+import UpdateMovieDialog from './update-movie-dialog'
+export default function MovieTable({ movies }) {
+  const [selectedMovie, setSelectedMovie] = useState(null)
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false)
+
+  const toggleUpdateDialog = open => {
+    //Using requestAnimationFrame to ensure the dialog opens smoothly
+    requestAnimationFrame(() => setShowUpdateDialog(open || !showUpdateDialog))
+  }
+
+  const getMovieStatusClass = status => {
+    switch (status) {
+      case 'published':
+        return 'bg-green-100 text-green-800'
+      case 'draft':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'archived':
+        return 'bg-red-100 text-red-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
+    }
+  }
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -64,9 +88,9 @@ export default function MovieTable({movies}) {
                   ))}
                 </div>
               </TableCell>
-              <TableCell>{movies.rating}</TableCell>
+              <TableCell>{Number(movies?.imdb?.rating).toFixed(1)}</TableCell>
               <TableCell className="capitalize">
-                <Badge className="bg-green-100 text-green-800">
+                <Badge className={getMovieStatusClass(movies.status)}>
                   {movies.status}
                 </Badge>
               </TableCell>
@@ -82,7 +106,14 @@ export default function MovieTable({movies}) {
                     <DropdownMenuLabel>Movie Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>View Details</DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSelectedMovie(movies)
+                        toggleUpdateDialog(true)
+                      }}
+                    >
+                      Edit
+                    </DropdownMenuItem>
                     <DropdownMenuItem className="text-destructive">
                       Delete
                     </DropdownMenuItem>
@@ -93,6 +124,12 @@ export default function MovieTable({movies}) {
           ))}
         </TableBody>
       </Table>
+
+      <UpdateMovieDialog
+        open={showUpdateDialog}
+        onOpenChange={setShowUpdateDialog}
+        movies={selectedMovie}
+      />
     </div>
   )
 }

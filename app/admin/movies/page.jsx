@@ -1,7 +1,6 @@
 import AddMovieDialog from './add-movie-dialog'
 import MovieData from './movie-data'
 
-
 export default function MoviePage() {
   return (
     // space-y-4 = 16px
@@ -17,7 +16,7 @@ export default function MoviePage() {
 
         <AddMovieDialog />
       </div>
-      <MovieData/>
+      <MovieData />
     </div>
   )
 }

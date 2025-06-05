@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import {
   Select,
@@ -15,15 +16,28 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { createMovie } from '@/actions/movies'
+import { UpdateMovie } from '@/actions/movies'
+
 import { Hand } from 'lucide-react'
 import { getAllGenres, getAllYears } from '@/lib/utils'
 
 //destructure the AddMovieForm component prop
-export function AddMovieForm({ onClose }) {
-  const [selectedYear, setSelectedYear] = useState('')
-  const [selectedGenre, setSelectedGenre] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState('')
+export function UpdateMovieForm({ onClose, movie }) {
+  const router = useRouter()
+  const [selectedYear, setSelectedYear] = useState(movie?.year || null)
+  const [selectedGenre, setSelectedGenre] = useState(
+    movie?.genres.at(0) || null,
+  )
+  const [status, setSelectedStatus] = useState(movie?.status || '')
+
+  const [title, setTitle] = useState(movie?.title || '')
+  const [director, setDirector] = useState(movie?.directors.at(0) || '')
+  const [rating, setRating] = useState(movie?.imdb?.rating || '')
+
+  const [runtime, setRuntime] = useState(movie?.runtime || '')
+  const [overview, setOverview] = useState(movie?.plot || '')
+  const [poster, setPoster] = useState(movie?.poster || '')
+  const [backdrop, setBackdrop] = useState(movie?.backdrop || '')
 
   const HandelClose = () => {
     setSelectedYear(null)
@@ -44,43 +58,39 @@ export function AddMovieForm({ onClose }) {
   const handelSubmit = async event => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const title = formData.get('title')
-    const year = formData.get('year')
-    const director = formData.get('director')
-    const genre = formData.get('genre')
     const rating = formData.get('rating')
     const runtime = formData.get('runtime')
     const overview = formData.get('overview')
     const poster = formData.get('poster')
     const backdrop = formData.get('backdrop')
-    const MovieStatus = formData.get('status')
+
     // Here you can handle the form submission, e.g., send data to an API
     console.log('Form data  :', {
       title,
-      year,
+      year: selectedYear,
       director,
-      genre,
+      genre: selectedGenre,
       rating,
       runtime,
       overview,
       poster,
       backdrop,
-      MovieStatus,
+      status,
     })
 
     setIsSubmitting(true)
 
-    const response = await createMovie({
+    const response = await UpdateMovie(movie?.id, {
       title,
-      year,
+      year: selectedYear,
       directors: [director],
-      genres: [genre],
+      genres: [selectedGenre],
       imdb: { rating: Number(rating) },
       runtime,
       plot: overview,
       poster,
       backdrop,
-      status: MovieStatus,
+      status,
       lastupdated: Date().toString(),
     })
 
@@ -89,6 +99,7 @@ export function AddMovieForm({ onClose }) {
     if (response?.success) {
       console.log(response)
       HandelClose()
+      router.refresh()
     }
 
     setTimeout(() => setIsSubmitting(false), 3000)
@@ -99,7 +110,14 @@ export function AddMovieForm({ onClose }) {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2 ">
           <Label htmlFor="title">Title</Label>
-          <Input id="title" name="title" placeholder="Movie title" required />
+          <Input
+            id="title"
+            name="title"
+            placeholder="Movie title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            required
+          />
         </div>
         <div className="space-y-2 ">
           <Label htmlFor="year">Year</Label>
@@ -126,7 +144,13 @@ export function AddMovieForm({ onClose }) {
 
         <div className="space-y-2 ">
           <Label htmlFor="director">Director</Label>
-          <Input id="director" name="director" placeholder="Director name" />
+          <Input
+            id="director"
+            name="director"
+            value={director}
+            onChange={e => setDirector(e.target.value)}
+            placeholder="Director name"
+          />
         </div>
         <div className="space-y-2 ">
           <Label htmlFor="genre">Genre</Label>
@@ -159,6 +183,8 @@ export function AddMovieForm({ onClose }) {
             min="0"
             max="10"
             step="0.1"
+            value={rating}
+            onChange={e => setRating(e.target.value)}
             placeholder="Rating (0.0 - 10.0)"
             required
           />
@@ -170,6 +196,8 @@ export function AddMovieForm({ onClose }) {
             name="runtime"
             type="number"
             min="1"
+            value={runtime}
+            onChange={e => setRuntime(e.target.value)}
             placeholder="Runtime in minutes"
             required
           />
@@ -183,6 +211,8 @@ export function AddMovieForm({ onClose }) {
           name="overview"
           placeholder="Movie description"
           className="max-h-[100px]"
+          value={overview}
+          onChange={e => setOverview(e.target.value)}
         />
       </div>
 
@@ -193,6 +223,8 @@ export function AddMovieForm({ onClose }) {
             id="poster"
             name="poster"
             placeholder="URL to poster image"
+            value={poster}
+            onChange={e => setPoster(e.target.value)}
             required
           />
         </div>
@@ -202,14 +234,16 @@ export function AddMovieForm({ onClose }) {
             id="backdrop"
             name="backdrop"
             placeholder="URL to backdrop image"
+            value={backdrop}
+            onChange={e => setBackdrop(e.target.value)}
           />
         </div>
 
         <div className="space-y-2 ">
           <Label htmlFor="status">Status</Label>
           <Select
-            value={selectedStatus}
-            onValueChange={setSelectedStatus}
+            value={status}
+            onChange={e => setSelectedStatus(e.target.value)}
             id="status"
             name="status"
             required
@@ -237,7 +271,7 @@ export function AddMovieForm({ onClose }) {
           Cancel
         </Button>
         <Button type="submit" className="min-w-[102]" disabled={isSubmitting}>
-          {isSubmitting ? 'Adding..' : 'Add movie'}
+          {isSubmitting ? 'Saving...' : 'Save Changes'}
         </Button>
       </DialogFooter>
     </form>
