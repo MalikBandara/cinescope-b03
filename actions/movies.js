@@ -9,7 +9,7 @@ export const getMovies = async () => {
   try {
     //using fetch to get movies from the server
 
-    const response = await fetch('http://localhost:3000/api/v1/movies', {
+    const response = await fetch(`${process.env.BASE_URL}/v1/movies`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
