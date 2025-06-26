@@ -27,7 +27,9 @@ export default async function MovieDetailsPage({ params, searchParams }) {
 
   console.log('movie ', movie)
 
-  
+  if (!movie || !movie.data) {
+    throw new Error('Movie not found')
+  }
 
   return (
     <main className="flex flex-col justify-center items-center py-16 px-4 mx-auto">

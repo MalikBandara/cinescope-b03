@@ -1,6 +1,9 @@
 //HeroBanner section
 
-export default function HeroBanner() {
+export default function HeroBanner({
+  title = 'CineScope Movie Database',
+  description = 'Sample Description Here...',
+}) {
   return (
     <section id="overview" className="relative overflow-hidden min-h-[70vh] ">
       <div className="absolute inset-0 z-0">
@@ -9,12 +12,12 @@ export default function HeroBanner() {
       </div>
       <div className="container relative z-20 px-4 py-32 ">
         <h1 className="text-white text-6xl font-bold text-center py-20">
-          Hero Title hear
+          {title}
         </h1>
         <p className="text-white text-center text-xl ">
-          sample Description hear{" "}
+          {description}
         </p>
       </div>
     </section>
-  );
+  )
 }

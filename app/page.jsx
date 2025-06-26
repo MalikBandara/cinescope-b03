@@ -1,7 +1,7 @@
 // SSR - Server Side Rendered - Server Component
-import HeaderNav from "@/components/header-nav"; //alias import
-import FeaturedMovies from "@/components/home/featured-moives";
-import HeroBanner from "@/components/home/hero-banner";
+import HeaderNav from '@/components/header-nav' //alias import
+import FeaturedMovies from '@/components/home/featured-moives'
+import HeroBanner from '@/components/home/hero-banner'
 
 export default function Home() {
   return (
@@ -13,5 +13,5 @@ export default function Home() {
       </main>
       <footer className=" bg-amber-400 h-72"> Footer Section</footer>
     </div>
-  );
+  )
 }
