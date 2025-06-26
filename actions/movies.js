@@ -100,6 +100,43 @@ export const UpdateMovie = async (movieId, movieDoc) => {
   }
 }
 
+//get all movies with filters action
+export const searchMovies = async query => {
+  try {
+    //
+    const movies = await db
+      .collection('movies')
+      .find({ title: { $regex: query, $options: 'i' } })
+      .limit(50)
+      .toArray()
+
+    // console.log('search movies ', movies.length, query)
+
+    if (movies && movies.length > 0) {
+      return {
+        success: true,
+        message: 'Movies successfully fetched',
+        data: movies,
+      }
+    }else {
+
+      return {
+        success: false,
+        message: 'No movies found',
+        data: [],
+      }
+    }
+  } catch (error) {
+    //
+    console.log('mongo db fetch failed', error)
+    return {
+      success: false,
+      message: 'Error fetching movies ',
+      data: [],
+    }
+  }
+}
+
 // delete movie action
 export const DeleteMovie = async movieId => {
   try {

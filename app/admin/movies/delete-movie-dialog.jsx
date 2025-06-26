@@ -19,7 +19,7 @@ export default function DeleteMovieDialog({
   movies,
   isLoading = false,
 }) {
-  console.log('movies', movies)
+  // console.log('movies', movies)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] ">

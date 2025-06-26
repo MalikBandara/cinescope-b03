@@ -1,14 +1,21 @@
 import React from 'react'
 
-import { db } from '@/lib/db'
+// import { db } from '@/lib/db'
 import MovieTable from './movie-table'
+import { searchMovies } from '@/actions/movies'
 
-export default async function MovieData() {
+export default async function MovieData({ query = '' }) {
   try {
-    const movies = await db.collection('movies_n').find({}).limit(50).toArray()
+    // const movies = await db.collection('movies_n').find({}).limit(50).toArray()
 
-    if (movies.length > 0) {
-      const refineMovies = movies.map((movie, key) => ({
+    const { data: moviesData = [] } = await searchMovies(query)
+
+    // console.log(movies)
+
+    if (!moviesData.length) throw new Error('No movies found in the database.')
+
+    if (moviesData.length > 0) {
+      const refineMovies = moviesData.map((movie, key) => ({
         id: movie._id.toString(),
         title: movie.title,
         year: movie.year,
@@ -18,9 +25,9 @@ export default async function MovieData() {
         poster: movie.poster,
         imdb: movie.imdb,
         runtime: movie.runtime,
-        status: movie.status,
+        status: movie.status ?? 'published',
         directors: movie.directors,
-        backdrop : movie.backdrop
+        backdrop: movie.backdrop,
       }))
       return <MovieTable movies={refineMovies} />
     } else {
