@@ -105,7 +105,7 @@ export const searchMovies = async query => {
   try {
     //
     const movies = await db
-      .collection('movies')
+      .collection('movies_n')
       .find({ title: { $regex: query, $options: 'i' } })
       .limit(50)
       .toArray()
