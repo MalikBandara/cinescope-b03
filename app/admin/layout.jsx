@@ -1,5 +1,6 @@
 import AdminSidebar from '@/components/admin-sidebar'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
+import UserNav from '@/components/user-nav'
 import { Children } from 'react'
 
 export default function AdminLayout({ children }) {
@@ -15,9 +16,7 @@ export default function AdminLayout({ children }) {
             <h1 className="text-xl font-bold">Admin dashboard</h1>
 
             {/* User dropdown navigation */}
-            <div className='bg-red-600 rounded-full h-10 w-10 flex justify-center items-center'>
-              HS
-            </div>
+            <UserNav/>
           </div>
         </header>
         <div className="flex-1 p-4 md:p-8">{children}</div>
