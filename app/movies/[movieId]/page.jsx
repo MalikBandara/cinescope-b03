@@ -27,6 +27,8 @@ export default async function MovieDetailsPage({ params, searchParams }) {
 
   console.log('movie ', movie)
 
+  
+
   return (
     <main className="flex flex-col justify-center items-center py-16 px-4 mx-auto">
       <h1 className="text-amber-600 text-center font-bold text-xl">
