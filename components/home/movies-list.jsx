@@ -1,6 +1,5 @@
 import { getMovies } from '@/actions/movies'
-import MovieCard ,{MovieCardSkeleton} from './movie-card'
-
+import MovieCard, { MovieCardSkeleton } from './movie-card'
 
 export default async function MoviesList() {
   const movies = await getMovies()
@@ -13,13 +12,13 @@ export default async function MoviesList() {
     )
   }
 
-  console.log(movies)
+  // console.log(movies)
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {/*movies loop*/}
       {movies.map((movie, index) => (
-        <div key={`${movie.id}-${index}`} className="">
+        <div key={`${movie._id}-${index}`} className="">
           <MovieCard movie={movie} />
         </div>
       ))}
