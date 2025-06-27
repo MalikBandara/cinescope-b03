@@ -1,4 +1,5 @@
 'use client'
+
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,8 +11,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 
-import { Plus } from 'lucide-react'
-
 export default function DeleteMovieDialog({
   open,
   onOpenChange,
@@ -19,21 +18,19 @@ export default function DeleteMovieDialog({
   movies,
   isLoading = false,
 }) {
-  // console.log('movies', movies)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] ">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Delete Movie</DialogTitle>
           <DialogDescription className="text-sm text-gray-500 text-center">
-            Are you sure you want to delete this movie?{' '}
+            Are you sure you want to delete{' '}
             <strong>
               {movies?.title} ({movies?.year})
-            </strong>{' '}
-            ?<br />
-            <span className="text-xs ">
-              Note : this action cannot be undone.
-            </span>
+            </strong>
+            ?
+            <br />
+            <span className="text-xs">Note: this action cannot be undone.</span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -49,7 +46,8 @@ export default function DeleteMovieDialog({
             onClick={() => onConfirm(movies.id)}
             disabled={isLoading}
           >
-            {isLoading && <Loader2 className="animate-spin"></Loader2>}Delete
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Delete
           </Button>
         </DialogFooter>
       </DialogContent>

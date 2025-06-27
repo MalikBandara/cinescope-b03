@@ -2,6 +2,7 @@
 import HeaderNav from '@/components/header-nav' //alias import
 import FeaturedMovies from '@/components/home/featured-moives'
 import HeroBanner from '@/components/home/hero-banner'
+import Footer from '@/components/home/footer'
 
 export default function Home() {
   return (
@@ -11,7 +12,8 @@ export default function Home() {
         <HeroBanner />
         <FeaturedMovies />
       </main>
-      <footer className=" bg-amber-400 h-72"> Footer Section</footer>
+
+      <Footer />
     </div>
   )
 }
