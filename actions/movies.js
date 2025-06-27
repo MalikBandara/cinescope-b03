@@ -9,12 +9,14 @@ export const getMovies = async () => {
   try {
     //using fetch to get movies from the server
 
-    const response = await fetch(`${process.env.API_BASE_URL}/v1/movies`, {
+    const baseUrl = process.env.API_BASE_URL?.replace(/\/$/, '')
+    const response = await fetch(`${baseUrl}/v1/movies`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
+      
     })
 
     if (!response.ok) {
