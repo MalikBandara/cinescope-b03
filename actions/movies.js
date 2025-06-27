@@ -12,7 +12,7 @@ export const getMovies = async () => {
     const response = await fetch(`${process.env.API_BASE_URL}/v1/movies`, {
       method: 'GET',
       headers: {
-        'Content-type': 'application/json',
+        'Content-Type': 'application/json',
         Accept: 'application/json',
       },
     })
